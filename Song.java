@@ -49,7 +49,9 @@ public class Song{
       	  			String newTitle = "";
       	  			String newArtist = "";
       	  			String filetype = "";
-      	  			
+
+
+      	  			//Compose new track from directory, title, artist and previous filetype
       	  			Iterator<String> itor2 = title.iterator();
 					while(itor2.hasNext()){
 						newTitle += itor2.next();
@@ -66,10 +68,16 @@ public class Song{
 
 					filetype = name.replaceFirst(".*\\.", "");
 
-					String newTrack = "Music/" + newTitle + " - " + newArtist + "." + filetype;
+					String newTrack = RenameMiami.music_dir + "/" + newTitle + " - " + newArtist + "." + filetype;
 					System.out.println(newTrack);
 
+					//Checks if file exists, and user wanted to delete the original copy
       	  			File file2 = new File (newTrack);
+      	  			if(file2.exists() && RenameMiami.d == true) Files.delete(file.toPath());
+      	  			if(file2.exists()){
+      	  				System.out.println("File: \"" + file2.getName() + "\" already exists");
+      	  				break;
+      	  			}
       	  			Files.copy(file.toPath(), file2.toPath());
       	  			break;
       	  		}

@@ -7,18 +7,33 @@
 //http://stackoverflow.com/questions/1844688/read-all-files-in-a-folder
  
 import java.io.*;
+import java.util.*;
 
  public class RenameMiami {
 
  	public static int matches = 0;
+ 	public static boolean d = false;
+ 	public static String music_dir;
 
  	public static void main(String[] args){
+
+ 		System.out.println("Drag the folder with your music in here: ");
+ 		Scanner input = new Scanner(System.in);
+ 		music_dir = input.next();
+ 		String user_choice = "";
+ 		while(!(user_choice.equals("y")) && !(user_choice.equals("n"))){
+ 			System.out.println("Do you want to delete the original files y/n?");
+ 			user_choice = input.next();
+ 		}
+
+ 		if (user_choice.equals("y")) d = true;
+
 
  		try{
 
 	 		//Tracklist file
 	 		File tracklist = new File("hlm2-tracklist.txt");
-	 		File folder = new File("/Users/marcatlan/Desktop/HLM2/");
+	 		File folder = new File(music_dir);
 
 	 		//Read in all lines of the tracklist
 	 		FileInputStream fstream = new FileInputStream(tracklist);
@@ -37,7 +52,7 @@ import java.io.*;
 
 		}catch(Exception e){
 
-			System.out.println("Error while trying to read file " + e.getMessage());
+			System.out.println("Error: " + e.getMessage());
 		}
 
  	}
