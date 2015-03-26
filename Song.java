@@ -2,6 +2,7 @@
 
 import java.util.*;
 import java.io.*;
+import java.nio.file.Files;
 
 public class Song{
 	private List<String> title;
@@ -16,7 +17,7 @@ public class Song{
 	//Removes all non-alpha numberic characters from track for comparative reasons
 	public void fromList(String track){
 		
-		String[] splitTrackTitle = track.split("([0-9]*\\-\\s|\\(.*)|\\.*\\s+");
+		String[] splitTrackTitle = track.split("([0-9]*\\-\\s|\\(.*|\\s+)");
 		
 		for(int i = 1; i < splitTrackTitle.length; i++){
 			title.add(splitTrackTitle[i]);
@@ -29,16 +30,62 @@ public class Song{
 		}
 	}
 
-	public void compareSong(String track){
+	public void findSong(File dir) throws IOException{
+
+		String flatTitle = "";
+		Iterator<String> itor = title.iterator();
+		while(itor.hasNext()){
+			flatTitle += itor.next().toLowerCase();
+		}
+
+		File[] listOfFiles = dir.listFiles();
+
+		for (File file : listOfFiles) {
+   			 if (file.isFile()) {
+   			 	String name = file.getName();
+   			 	String nameLow = name.toLowerCase().replaceFirst("(\\..{2,4}$)", "");
+      	  		if (flatTitle.contains(nameLow)){
+      	  			RenameMiami.matches++;
+      	  			String newTitle = "";
+      	  			String newArtist = "";
+      	  			String filetype = "";
+      	  			
+      	  			Iterator<String> itor2 = title.iterator();
+					while(itor2.hasNext()){
+						newTitle += itor2.next();
+						newTitle += " ";
+					}
+					newTitle = newTitle.trim();
+
+					itor2 = artist.iterator();
+					while(itor2.hasNext()){
+						newArtist += itor2.next();
+						newArtist += " ";
+					}
+					newArtist = newArtist.trim();
+
+					filetype = name.replaceFirst(".*\\.", "");
+
+					String newTrack = "Music/" + newTitle + " - " + newArtist + "." + filetype;
+					System.out.println(newTrack);
+
+      	  			File file2 = new File (newTrack);
+      	  			Files.copy(file.toPath(), file2.toPath());
+      	  			break;
+      	  		}
+    		}
+		}
 		
 	}
 
 	public void printTitle(){
-		// ListIterator<String> itor = title.ListIterator();
-		// while(itor.hasNext()){
-		// 	System.out.println(itor.next());
-		// }
-		System.out.println("Title: " + title);
-		System.out.println("Artist: " + artist);
+
+		Iterator<String> itor = title.iterator();
+
+		while(itor.hasNext()){
+			System.out.print(itor.next() + " ");
+		}
+
+		System.out.println();
 	}
 }
